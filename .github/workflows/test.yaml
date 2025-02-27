@@ -1,38 +1,39 @@
 ---
-  name: Test
-  
-  on:
-    pull_request:
-      branches:
-        - main
-      paths:
-        - "**.py"
-    workflow_dispatch:
-  
-  jobs:
-    test:
-      name: Test
-      runs-on: ubuntu-24.04
-      strategy:
-        fail-fast: false
-        max-parallel: 1
-        matrix:
-          container: [github-status-pushover]
-      steps:
-        # Set up Python 3.13
-        # https://github.com/actions/setup-python
-        - name: Set up Python
-          uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
-          with:
-            python-version: "3.13"
-        # Checkout repository
-        # https://github.com/actions/checkout
-        - name: Checkout repository
-          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        # Install test dependencies
-        - name: Install test dependencies
-          run: |
-            pip install pytest pytest-mock
-        - name: Execute tests
-          run: |
-            pytest tests/ -v
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**.py"
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        container: [github-status-pushover]
+    steps:
+      # Set up Python 3.13
+      # https://github.com/actions/setup-python
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: "3.13"
+      # Checkout repository
+      # https://github.com/actions/checkout
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      # Install test dependencies
+      - name: Install test dependencies
+        run: |
+          pipx install uv
+          pip install pytest pytest-mock
+      - name: Execute tests
+        run: |
+          uv run pytest tests/ -v
