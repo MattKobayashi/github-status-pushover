@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import time
 from unittest import mock
 from datetime import datetime, timedelta
 import pytest
@@ -62,15 +63,19 @@ def test_save_last_checked_time():
 
 def test_check_feed_new_entries(mock_feedparser):
     """Test processing new feed entries"""
-    # Setup test data
+    # Create proper struct_time mock objects
+    old_time = time.struct_time((2023, 1, 1, 10, 0, 0, 0, 0, 0))
+    new_time = time.struct_time((2023, 1, 1, 12, 0, 0, 0, 0, 0))
+
+    # Create mock entries with proper structure
     old_entry = mock.Mock(
-        published_parsed=(2023, 1, 1, 10, 0, 0, 0, 0, 0),
+        published_parsed=old_time,
         title="Old",
         description="Old issue",
         link="old"
     )
     new_entry = mock.Mock(
-        published_parsed=(2023, 1, 1, 12, 0, 0, 0, 0, 0),
+        published_parsed=new_time,
         title="New",
         description="New issue",
         link="new"
@@ -87,7 +92,6 @@ def test_check_feed_new_entries(mock_feedparser):
         mock.patch('main.send_pushover_notification') as mock_notify,
         mock.patch('main.save_last_checked_time') as mock_save
     ):
-
         main.check_feed()
 
         # Verify only new entry triggered notification
