@@ -33,7 +33,6 @@ jobs:
       - name: Install test dependencies
         run: |
           pipx install uv
-          pip install pytest pytest-mock
       - name: Execute tests
         run: |
-          uv run pytest tests/ -v
+          uv run --with pytest==8.3.4 --with pytest-mock==3.14.0 pytest tests/ -v
