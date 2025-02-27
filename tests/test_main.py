@@ -96,7 +96,7 @@ def test_check_feed_new_entries(mock_feedparser):
 
         # Verify only new entry triggered notification
         mock_notify.assert_called_once_with(
-            "New", "New issue", "new"
+            title="New", message="New issue", url="new"
         )
         mock_save.assert_called_once()
 
