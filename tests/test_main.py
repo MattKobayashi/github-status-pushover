@@ -108,9 +108,11 @@ def test_main_loop_execution(mock_time):
         mock.patch('main.CHECK_INTERVAL', 0.1)  # Shorter interval for testing
     ):
 
-        # Simulate keyboard interrupt after first iteration
-        mock_time.sleep.side_effect = KeyboardInterrupt()
-        main.main()
+        # Simulate graceful termination via SystemExit after the first sleep call
+        mock_time.sleep.side_effect = SystemExit(0)
+        with pytest.raises(SystemExit) as excinfo:
+            main.main()
+        assert excinfo.value.code == 0
 
         mock_check.assert_called_once()
         mock_time.sleep.assert_called_once_with(0.1)
