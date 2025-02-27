@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/MattKobayashi/github-status-pushover/compare/v1.0.0...v1.1.0) (2025-02-27)
+
+
+### Features
+
+* Add user 'app' in Dockerfile for improved security ([9915172](https://github.com/MattKobayashi/github-status-pushover/commit/9915172494fa29ed2504e43e3ec4f33ca0a91978))
+
 ## 1.0.0 (2025-02-27)
 
 
