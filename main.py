@@ -1,8 +1,3 @@
-def main():
-
-
-if __name__ == "__main__":
-    main()
 import os
 import time
 import feedparser
@@ -54,7 +49,10 @@ def check_feed():
     
     save_last_checked_time()
 
-if __name__ == "__main__":
+def main():
     while True:
         check_feed()
         time.sleep(CHECK_INTERVAL)
+
+if __name__ == "__main__":
+    main()
