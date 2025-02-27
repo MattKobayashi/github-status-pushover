@@ -99,8 +99,10 @@ def test_check_feed_new_entries(mock_feedparser):
 
 def test_main_loop_execution(mock_time):
     """Test main loop execution flow"""
-    with mock.patch('main.check_feed') as mock_check, \
-         mock.patch('main.CHECK_INTERVAL', 0.1):  # Shorter interval for testing
+    with (
+        mock.patch('main.check_feed') as mock_check,
+        mock.patch('main.CHECK_INTERVAL', 0.1)  # Shorter interval for testing
+    ):
 
         # Simulate keyboard interrupt after first iteration
         mock_time.sleep.side_effect = KeyboardInterrupt()
