@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.2...v1.1.3) (2025-02-28)
+
+
+### Bug Fixes
+
+* Update save_last_checked_time to accept optional last_time parameter ([6297c5f](https://github.com/MattKobayashi/github-status-pushover/commit/6297c5f118ec18afc9f4317f1a55d14b70bb9ace))
+
 ## [1.1.2](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.1...v1.1.2) (2025-02-28)
 
 
