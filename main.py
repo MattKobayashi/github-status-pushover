@@ -127,7 +127,10 @@ def check_feed():
         last_checked = get_last_checked_time()
         new_last_checked = last_checked
         # Process entries in chronological order (oldest first)
-        for entry in sorted(feed.entries, key=lambda e: datetime(*e.published_parsed[:6])):
+        for entry in sorted(
+            feed.entries,
+            key=lambda e: datetime(*e.published_parsed[:6])
+        ):
             published_time = datetime(*entry.published_parsed[:6])
             if published_time > last_checked:
                 send_pushover_notification(
@@ -135,8 +138,7 @@ def check_feed():
                     message=html_to_text(entry.description),
                     url=entry.link
                 )
-                if published_time > new_last_checked:
-                    new_last_checked = published_time
+                new_last_checked = max(new_last_checked, published_time)
         save_last_checked_time(new_last_checked)
 
 
