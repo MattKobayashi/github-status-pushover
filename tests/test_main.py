@@ -86,15 +86,23 @@ def test_check_feed_new_entries(mock_feedparser):
 
     with (
         mock.patch(
+            'main.os.path.exists',
+            return_value=True
+        ),
+        mock.patch(
             'main.get_last_checked_time',
             return_value=datetime(2023, 1, 1, 11, 0)
         ),
-        mock.patch('main.send_pushover_notification') as mock_notify,
-        mock.patch('main.save_last_checked_time') as mock_save
+        mock.patch(
+            'main.send_pushover_notification'
+        ) as mock_notify,
+        mock.patch(
+            'main.save_last_checked_time'
+        ) as mock_save
     ):
         main.check_feed()
 
-        # Verify only new entry triggered notification
+        # Verify only the new entry (published after 11:00) is notified.
         mock_notify.assert_called_once_with(
             title="New", message="New issue", url="new"
         )
@@ -124,3 +132,37 @@ def test_html_to_text():
     # We expect tags to be removed and HTML entities unescaped: "&copy;" becomes "©"
     expected_output = "Hello, world! & ©"
     assert main.html_to_text(html_input) == expected_output
+def test_check_feed_initial_run(mock_feedparser):
+    """Test that on initial run (no .last_checked file) only the most recent update is sent."""
+    # Create struct_time objects for two entries.
+    old_time = time.struct_time((2023, 1, 1, 10, 0, 0, 0, 0, 0))
+    new_time = time.struct_time((2023, 1, 1, 12, 0, 0, 0, 0, 0))
+
+    old_entry = mock.Mock(
+        published_parsed=old_time,
+        title="Old update",
+        description="<p>Old update</p>",
+        link="http://old.com"
+    )
+    new_entry = mock.Mock(
+        published_parsed=new_time,
+        title="New update",
+        description="<p>New update</p>",
+        link="http://new.com"
+    )
+
+    # Simulate feed with both entries (order does not matter because max() is used)
+    mock_feedparser.parse.return_value.entries = [old_entry, new_entry]
+
+    with mock.patch('main.os.path.exists', return_value=False), \
+         mock.patch('main.send_pushover_notification') as mock_notify, \
+         mock.patch('main.save_last_checked_time') as mock_save:
+        main.check_feed()
+
+        # Expect only the most recent entry to be notified.
+        mock_notify.assert_called_once_with(
+            title="New update",
+            message="New update",
+            url="http://new.com"
+        )
+        mock_save.assert_called_once()

@@ -103,19 +103,30 @@ def check_feed():
     Returns:
         None
     """
-    last_checked = get_last_checked_time()
-    feed = feedparser.parse(RSS_URL)
-
-    for entry in reversed(feed.entries):  # Process oldest first
-        published_time = datetime(*entry.published_parsed[:6])
-        if published_time > last_checked:
+    if not os.path.exists(LAST_CHECK_FILE):
+        # Initial run: send only the most recent update.
+        feed = feedparser.parse(RSS_URL)
+        if feed.entries:
+            newest_entry = max(feed.entries, key=lambda e: datetime(*e.published_parsed[:6]))
             send_pushover_notification(
-                title=entry.title,
-                message=html_to_text(entry.description),
-                url=entry.link
+                title=newest_entry.title,
+                message=html_to_text(newest_entry.description),
+                url=newest_entry.link
             )
+        save_last_checked_time()
+    else:
+        last_checked = get_last_checked_time()
+        feed = feedparser.parse(RSS_URL)
 
-    save_last_checked_time()
+        for entry in reversed(feed.entries):  # Process oldest first
+            published_time = datetime(*entry.published_parsed[:6])
+            if published_time > last_checked:
+                send_pushover_notification(
+                    title=entry.title,
+                    message=html_to_text(entry.description),
+                    url=entry.link
+                )
+        save_last_checked_time()
 
 
 def main():
