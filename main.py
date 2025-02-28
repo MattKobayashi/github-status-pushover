@@ -73,7 +73,7 @@ def get_last_checked_time():
         return datetime.now() - timedelta(minutes=60)
 
 
-def save_last_checked_time():
+def save_last_checked_time(last_time=None):
     """
     Saves the current datetime to a file in ISO format.
 
@@ -83,8 +83,10 @@ def save_last_checked_time():
     Returns:
         None
     """
+    if last_time is None:
+        last_time = datetime.now()
     with open(LAST_CHECK_FILE, 'w', encoding='utf-8') as f:
-        f.write(datetime.now().isoformat())
+        f.write(last_time.isoformat())
 
 
 def check_feed():
@@ -105,22 +107,27 @@ def check_feed():
     Returns:
         None
     """
+    feed = feedparser.parse(RSS_URL)
     if not os.path.exists(LAST_CHECK_FILE):
         # Initial run: send only the most recent update.
-        feed = feedparser.parse(RSS_URL)
         if feed.entries:
-            newest_entry = max(feed.entries, key=lambda e: datetime(*e.published_parsed[:6]))
+            newest_entry = max(
+                feed.entries, key=lambda e: datetime(*e.published_parsed[:6])
+            )
             send_pushover_notification(
                 title=newest_entry.title,
                 message=html_to_text(newest_entry.description),
                 url=newest_entry.link
             )
-        save_last_checked_time()
+            new_last_checked = datetime(*newest_entry.published_parsed[:6])
+        else:
+            new_last_checked = datetime.now()
+        save_last_checked_time(new_last_checked)
     else:
         last_checked = get_last_checked_time()
-        feed = feedparser.parse(RSS_URL)
-
-        for entry in reversed(feed.entries):  # Process oldest first
+        new_last_checked = last_checked
+        # Process entries in chronological order (oldest first)
+        for entry in sorted(feed.entries, key=lambda e: datetime(*e.published_parsed[:6])):
             published_time = datetime(*entry.published_parsed[:6])
             if published_time > last_checked:
                 send_pushover_notification(
@@ -128,7 +135,9 @@ def check_feed():
                     message=html_to_text(entry.description),
                     url=entry.link
                 )
-        save_last_checked_time()
+                if published_time > new_last_checked:
+                    new_last_checked = published_time
+        save_last_checked_time(new_last_checked)
 
 
 def main():
