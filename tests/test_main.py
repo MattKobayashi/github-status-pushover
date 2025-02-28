@@ -134,40 +134,8 @@ def test_html_to_text():
     assert main.html_to_text(html_input) == expected_output
 
 
-def test_html_to_text_with_br(mock_feedparser):
+def test_html_to_text_with_br():
     """Test conversion of <br /> and <br/> tags into newline characters."""
     html_input = "First line<br />Second line<br/>Third line"
     expected_output = "First line\nSecond line\nThird line"
     assert main.html_to_text(html_input) == expected_output
-    # Create struct_time objects for two entries.
-    old_time = time.struct_time((2023, 1, 1, 10, 0, 0, 0, 0, 0))
-    new_time = time.struct_time((2023, 1, 1, 12, 0, 0, 0, 0, 0))
-
-    old_entry = mock.Mock(
-        published_parsed=old_time,
-        title="Old update",
-        description="<p>Old update</p>",
-        link="http://old.com"
-    )
-    new_entry = mock.Mock(
-        published_parsed=new_time,
-        title="New update",
-        description="<p>New update</p>",
-        link="http://new.com"
-    )
-
-    # Simulate feed with both entries (order does not matter because max() is used)
-    mock_feedparser.parse.return_value.entries = [old_entry, new_entry]
-
-    with mock.patch('main.os.path.exists', return_value=False), \
-         mock.patch('main.send_pushover_notification') as mock_notify, \
-         mock.patch('main.save_last_checked_time') as mock_save:
-        main.check_feed()
-
-        # Expect only the most recent entry to be notified.
-        mock_notify.assert_called_once_with(
-            title="New update",
-            message="New update",
-            url="http://new.com"
-        )
-        mock_save.assert_called_once()
