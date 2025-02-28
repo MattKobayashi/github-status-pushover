@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.0...v1.1.1) (2025-02-28)
+
+
+### Bug Fixes
+
+* Update check_feed to handle initial run and send most recent update ([fa675e2](https://github.com/MattKobayashi/github-status-pushover/commit/fa675e21dbe65f432a1e6e4d7313bc34f63b6bec))
+* Update html_to_text to handle closing &lt;p&gt; tags as new paragraphs ([025508b](https://github.com/MattKobayashi/github-status-pushover/commit/025508b07301de0669d032040f16da875a18a167))
+
 ## [1.1.0](https://github.com/MattKobayashi/github-status-pushover/compare/v1.0.0...v1.1.0) (2025-02-28)
 
 
