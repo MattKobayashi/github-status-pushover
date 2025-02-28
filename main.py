@@ -4,6 +4,8 @@ import time
 from datetime import datetime, timedelta
 import feedparser
 import requests
+import re
+from html import unescape
 
 # Configuration
 CHECK_INTERVAL = int(os.getenv('CHECK_INTERVAL', '300'))  # Default 5 minutes
@@ -11,6 +13,12 @@ PUSHOVER_TOKEN = os.environ['PUSHOVER_TOKEN']
 PUSHOVER_USER = os.environ['PUSHOVER_USER']
 RSS_URL = 'https://www.githubstatus.com/history.rss'
 LAST_CHECK_FILE = '.last_checked'
+
+
+def html_to_text(html_content):
+    """Convert HTML content to plain text by stripping tags and unescaping entities."""
+    text = re.sub(r'<[^>]+>', '', html_content)
+    return unescape(text).strip()
 
 
 def send_pushover_notification(title, message, url):
@@ -99,7 +107,7 @@ def check_feed():
         if published_time > last_checked:
             send_pushover_notification(
                 title=entry.title,
-                message=entry.description,
+                message=html_to_text(entry.description),
                 url=entry.link
             )
 
