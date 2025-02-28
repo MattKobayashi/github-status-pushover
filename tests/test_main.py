@@ -134,6 +134,13 @@ def test_html_to_text():
     assert main.html_to_text(html_input) == expected_output
 
 
+def test_html_to_text_with_p():
+    """Test that <p> tags are properly converted into new paragraphs."""
+    html_input = "<p>First paragraph.</p><p>Second paragraph.</p>"
+    expected_output = "First paragraph.\n\nSecond paragraph."
+    assert main.html_to_text(html_input) == expected_output
+
+
 def test_html_to_text_with_br():
     """Test conversion of <br /> and <br/> tags into newline characters."""
     html_input = "First line<br />Second line<br/>Third line"
