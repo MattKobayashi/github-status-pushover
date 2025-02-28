@@ -116,3 +116,9 @@ def test_main_loop_execution(mock_time):
 
         mock_check.assert_called_once()
         mock_time.sleep.assert_called_once_with(0.1)
+def test_html_to_text():
+    """Test conversion of HTML content to plain text."""
+    html_input = "<p>Hello, <strong>world</strong>! &amp; &copy;</p>"
+    # We expect tags to be removed and HTML entities unescaped: "&copy;" becomes "©"
+    expected_output = "Hello, world! & ©"
+    assert main.html_to_text(html_input) == expected_output
