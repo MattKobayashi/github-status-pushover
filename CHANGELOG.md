@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/MattKobayashi/github-status-pushover/compare/v1.0.0...v1.1.0) (2025-02-28)
+
+
+### Features
+
+* Add HTML to text conversion for notification messages ([798ff57](https://github.com/MattKobayashi/github-status-pushover/commit/798ff5727a19caeaafe9083e2e44aac6592b8d1f))
+
 ## 1.0.0 (2025-02-27)
 
 
