@@ -132,8 +132,13 @@ def test_html_to_text():
     # We expect tags to be removed and HTML entities unescaped: "&copy;" becomes "©"
     expected_output = "Hello, world! & ©"
     assert main.html_to_text(html_input) == expected_output
-def test_check_feed_initial_run(mock_feedparser):
-    """Test that on initial run (no .last_checked file) only the most recent update is sent."""
+
+
+def test_html_to_text_with_br(mock_feedparser):
+    """Test conversion of <br /> and <br/> tags into newline characters."""
+    html_input = "First line<br />Second line<br/>Third line"
+    expected_output = "First line\nSecond line\nThird line"
+    assert main.html_to_text(html_input) == expected_output
     # Create struct_time objects for two entries.
     old_time = time.struct_time((2023, 1, 1, 10, 0, 0, 0, 0, 0))
     new_time = time.struct_time((2023, 1, 1, 12, 0, 0, 0, 0, 0))

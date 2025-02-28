@@ -18,7 +18,8 @@ LAST_CHECK_FILE = '.last_checked'
 def html_to_text(html_content):
     """Convert HTML content to plain text by converting <p> tags to new paragraphs,
     stripping remaining tags, and unescaping HTML entities."""
-    # Replace closing </p> tags with two newline characters to denote paragraph breaks.
+    # Convert <br /> and <br/> tags into newline characters.
+    html_content = html_content.replace('<br />', '\n').replace('<br/>', '\n')
     html_content = html_content.replace('</p>', '\n\n')
     # Remove all remaining HTML tags (including opening <p> tags).
     text = re.sub(r'<[^>]+>', '', html_content)
