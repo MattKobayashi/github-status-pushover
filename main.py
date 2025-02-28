@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-import os
-import time
 from datetime import datetime, timedelta
+from html import unescape
+import os
+import re
+import time
 import feedparser
 import requests
-import re
-from html import unescape
 
 # Configuration
 CHECK_INTERVAL = int(os.getenv('CHECK_INTERVAL', '300'))  # Default 5 minutes

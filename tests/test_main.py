@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
+from datetime import datetime, timedelta
 import time
 from unittest import mock
-from datetime import datetime, timedelta
 import pytest
 import main
 
