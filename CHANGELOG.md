@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.1...v1.1.2) (2025-02-28)
+
+
+### Bug Fixes
+
+* Update html_to_text to convert &lt;br /&gt; tags to newlines and add test ([795441f](https://github.com/MattKobayashi/github-status-pushover/commit/795441fad24c365669b276c86b35401e5fa7d330))
+
 ## [1.1.1](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.0...v1.1.1) (2025-02-28)
 
 
