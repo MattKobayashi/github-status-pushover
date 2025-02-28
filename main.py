@@ -20,8 +20,9 @@ def html_to_text(html_content):
     stripping remaining tags, and unescaping HTML entities."""
     # Convert <br /> and <br/> tags into newline characters.
     html_content = html_content.replace('<br />', '\n').replace('<br/>', '\n')
+    # Convert </p> tags into new paragraphs.
     html_content = html_content.replace('</p>', '\n\n')
-    # Remove all remaining HTML tags (including opening <p> tags).
+    # Remove all remaining HTML tags.
     text = re.sub(r'<[^>]+>', '', html_content)
     return unescape(text).strip()
 
