@@ -1,4 +1,4 @@
-FROM python:3.13.3-alpine3.21@sha256:7162b2925f5b34b36deffa3430c7209e994046a5ad412f163eab8dca4a6a6e38
+FROM python:3.13.3-alpine3.21@sha256:7ce9864f2f4181df6ad32ea6625fb80bee3031d679faec6015623525ba753706
 
 RUN adduser --disabled-password app \
     && apk --update-cache add py3-uv
