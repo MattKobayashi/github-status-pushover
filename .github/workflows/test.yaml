@@ -1,7 +1,7 @@
 ---
 jobs:
-  test:
-    name: Test
+  python:
+    name: Python
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
