@@ -1,16 +1,4 @@
 ---
-name: Test
-
-on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "**.py"
-      - "**.toml"
-      - "Dockerfile"
-  workflow_dispatch:
-
 jobs:
   test:
     name: Test
@@ -44,3 +32,14 @@ jobs:
             --with pytest==8.3.4 \
             --with pytest-mock==3.14.0 \
             pytest tests/ -v
+name: Test
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**.py"
+      - "**.toml"
+      - "**.yaml"
+      - "Dockerfile"
+  workflow_dispatch:
