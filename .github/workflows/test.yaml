@@ -28,10 +28,7 @@ jobs:
           PUSHOVER_USER: "test_user"
         name: Execute tests
         run: |
-          uv run \
-            --with pytest==8.3.4 \
-            --with pytest-mock==3.14.0 \
-            pytest tests/ -v
+          uv run --group test pytest tests/ -v
 name: Test
 on:
   pull_request:

@@ -8,3 +8,8 @@ dependencies = [
     "feedparser==6.0.11",
     "requests==2.32.4",
 ]
+[dependency-groups]
+test = [
+    "pytest==8.3.4",
+    "pytest-mock==3.14.0",
+]
