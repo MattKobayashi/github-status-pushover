@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.4...v1.1.5) (2025-07-21)
+
+
+### Bug Fixes
+
+* **docker:** use alpine base ([#43](https://github.com/MattKobayashi/github-status-pushover/issues/43)) ([d3a7449](https://github.com/MattKobayashi/github-status-pushover/commit/d3a7449110a92f733580d6b9f88ffc4dced1708e))
+
 ## [1.1.4](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.3...v1.1.4) (2025-06-09)
 
 
