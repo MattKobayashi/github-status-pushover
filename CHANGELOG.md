@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.6](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.5...v1.1.6) (2025-08-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency requests to v2.32.5 ([#49](https://github.com/MattKobayashi/github-status-pushover/issues/49)) ([081b5a4](https://github.com/MattKobayashi/github-status-pushover/commit/081b5a44bb298c424d800b90d12288c27f1114c2))
+
 ## [1.1.5](https://github.com/MattKobayashi/github-status-pushover/compare/v1.1.4...v1.1.5) (2025-07-21)
 
 
