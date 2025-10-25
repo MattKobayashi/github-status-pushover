@@ -11,5 +11,4 @@ wheels/
 .aider*
 .last_checked
 .env
-uv.lock
 .pytest_cache/
