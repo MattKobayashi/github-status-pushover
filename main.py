@@ -64,13 +64,13 @@ def get_last_checked_time():
 
     This function reads from a file defined by LAST_CHECK_FILE constant. The timestamp
     is expected to be stored in ISO format. If the file cannot be found, it assumes
-    the last check was 60 minutes ago from the current time.
+    the last check was now.
     """
     try:
         with open(LAST_CHECK_FILE, 'r', encoding='utf-8') as f:
             return datetime.fromisoformat(f.read().strip())
     except FileNotFoundError:
-        return datetime.now() - timedelta(minutes=60)
+        return datetime.now()
 
 
 def save_last_checked_time(last_time=None):
