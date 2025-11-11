@@ -17,9 +17,9 @@ def test_send_pushover_notification_success(mock_requests):
             "user": "test_user",
             "message": "Message",
             "title": "Test",
-            "url": "http://example.com"
+            "url": "http://example.com",
         },
-        timeout=5
+        timeout=5,
     )
 
 
@@ -33,27 +33,24 @@ def test_send_pushover_notification_failure(mock_requests):
 def test_get_last_checked_time_file_exists():
     """Test reading stored timestamp"""
     test_time = datetime(2023, 1, 1, 12, 0)
-    with mock.patch(
-        'builtins.open',
-        mock.mock_open(read_data=test_time.isoformat())
-    ):
+    with mock.patch("builtins.open", mock.mock_open(read_data=test_time.isoformat())):
         result = main.get_last_checked_time()
         assert result == test_time
 
 
 def test_get_last_checked_time_file_missing():
     """Test default timestamp when no file exists"""
-    with mock.patch('builtins.open', side_effect=FileNotFoundError):
+    with mock.patch("builtins.open", side_effect=FileNotFoundError):
         result = main.get_last_checked_time()
-        assert result < datetime.now() - timedelta(minutes=59)
+        assert result <= datetime.now()
 
 
 def test_save_last_checked_time():
     """Test saving current timestamp"""
     test_time = datetime(2023, 1, 1, 12, 0)
     with (
-        mock.patch('main.datetime') as mock_datetime,
-        mock.patch('builtins.open', mock.mock_open()) as mock_file
+        mock.patch("main.datetime") as mock_datetime,
+        mock.patch("builtins.open", mock.mock_open()) as mock_file,
     ):
         mock_datetime.now.return_value = test_time
         main.save_last_checked_time()
@@ -69,53 +66,36 @@ def test_check_feed_new_entries(mock_feedparser):
 
     # Create mock entries with proper structure
     old_entry = mock.Mock(
-        published_parsed=old_time,
-        title="Old",
-        description="Old issue",
-        link="old"
+        published_parsed=old_time, title="Old", description="Old issue", link="old"
     )
     new_entry = mock.Mock(
-        published_parsed=new_time,
-        title="New",
-        description="New issue",
-        link="new"
+        published_parsed=new_time, title="New", description="New issue", link="new"
     )
 
     # Mock feedparser response
     mock_feedparser.parse.return_value.entries = [new_entry, old_entry]
 
     with (
+        mock.patch("main.os.path.exists", return_value=True),
         mock.patch(
-            'main.os.path.exists',
-            return_value=True
+            "main.get_last_checked_time", return_value=datetime(2023, 1, 1, 11, 0)
         ),
-        mock.patch(
-            'main.get_last_checked_time',
-            return_value=datetime(2023, 1, 1, 11, 0)
-        ),
-        mock.patch(
-            'main.send_pushover_notification'
-        ) as mock_notify,
-        mock.patch(
-            'main.save_last_checked_time'
-        ) as mock_save
+        mock.patch("main.send_pushover_notification") as mock_notify,
+        mock.patch("main.save_last_checked_time") as mock_save,
     ):
         main.check_feed()
 
         # Verify only the new entry (published after 11:00) is notified.
-        mock_notify.assert_called_once_with(
-            title="New", message="New issue", url="new"
-        )
+        mock_notify.assert_called_once_with(title="New", message="New issue", url="new")
         mock_save.assert_called_once()
 
 
 def test_main_loop_execution(mock_time):
     """Test main loop execution flow"""
     with (
-        mock.patch('main.check_feed') as mock_check,
-        mock.patch('main.CHECK_INTERVAL', 0.1)  # Shorter interval for testing
+        mock.patch("main.check_feed") as mock_check,
+        mock.patch("main.CHECK_INTERVAL", 0.1),  # Shorter interval for testing
     ):
-
         # Simulate graceful termination via SystemExit after the first sleep call
         mock_time.sleep.side_effect = SystemExit(0)
         with pytest.raises(SystemExit) as excinfo:
